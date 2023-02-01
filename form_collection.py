@@ -3,6 +3,7 @@ import json
 import configparser
 
 
+# gets apikey from config file
 def get_apikey():
     config = configparser.ConfigParser()
     config.read('app.config')
@@ -10,6 +11,7 @@ def get_apikey():
     return apikey_from_file
 
 
+# gets password from config file
 def get_password():
     config = configparser.ConfigParser()
     config.read('app.config')
@@ -17,13 +19,14 @@ def get_password():
     return password_from_file
 
 
+# get form identifier from config file
 def get_identifier():
     config = configparser.ConfigParser()
     config.read('app.config')
     identifier_from_file = config['secrets']['identifier']
     return identifier_from_file
 
-
+# get subdomain from config file
 def get_subdomain():
     config = configparser.ConfigParser()
     config.read('app.config')
@@ -31,6 +34,7 @@ def get_subdomain():
     return subdomain_from_file
 
 
+# call API to get json data of form entries
 def get_json():
     subdomain = get_subdomain()
     base_url = 'https://{}.wufoo.com/api/v3/'.format(subdomain)
@@ -47,6 +51,7 @@ def get_json():
     return json.dumps(data, indent=4, sort_keys=True)
 
 
+# write json data from form entries to a file
 def write_to_file():
     with open("form_info.json", "w") as outfile:
         outfile.write(get_json())
