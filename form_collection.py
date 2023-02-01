@@ -26,6 +26,7 @@ def get_identifier():
     identifier_from_file = config['secrets']['identifier']
     return identifier_from_file
 
+
 # get subdomain from config file
 def get_subdomain():
     config = configparser.ConfigParser()
