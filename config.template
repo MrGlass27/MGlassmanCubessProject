@@ -1,0 +1,5 @@
+[secrets]
+apikey = put api key here
+password = put password here
+identifier = put form identifier here
+subdomain = put subdomain here
