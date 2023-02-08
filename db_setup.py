@@ -4,17 +4,17 @@ from form_collection import get_json
 
 
 sql_create_cubes_table = """ CREATE TABLE IF NOT EXISTS cubes_table (
-                                    id integer PRIMARY KEY,
+                                    id integer,
                                     firstname text NOT NULL,
                                     lastname text NOT NULL,
-                                    title text NOT NULL,
+                                    title text,
                                     organization text NOT NULL,
                                     email text NOT NULL,
-                                    website text NOT NULL,
-                                    phone# text NOT NULL,
-                                    opportunities text NOT NULL,
-                                    time text NOT NULL,
-                                    permission text NOT NULL
+                                    website text,
+                                    phone# text,
+                                    opportunities text,
+                                    time text,
+                                    permission text
                                 ); """
 
 
@@ -23,31 +23,33 @@ def create_table(conn, create_table_sql):
         conn.execute(create_table_sql)
     except Error as e:
         print(e)
+    finally:
+        conn.execute('''DELETE FROM cubes_table''')
 
 
 def push_to_table(info, cursor):
-    for record in info:
-        work_opportunities = record.get('Field109', None) + " " + record.get('Field110', None) + " " + \
-            record.get('Field111', None) + " " + record.get('Field112', None) + " " + \
-            record.get('Field113', None) + " " + record.get('Field114', None) + " " + \
-            record.get('Field115', None)
+    for entry in info:
+        work_opportunities = entry.get('Field109', None) + " " + entry.get('Field110', None) + " " + \
+            entry.get('Field111', None) + " " + entry.get('Field112', None) + " " + \
+            entry.get('Field113', None) + " " + entry.get('Field114', None) + " " + \
+            entry.get('Field115', None)
 
-        time_period = record.get('Field209', None) + " " + record.get('Field210', None) + " " + \
-            record.get('Field211', None) + " " + record.get('Field212', None) + " " + \
-            record.get('Field213', None)
+        time_period = entry.get('Field209', None) + " " + entry.get('Field210', None) + " " + \
+            entry.get('Field211', None) + " " + entry.get('Field212', None) + " " + \
+            entry.get('Field213', None)
 
         cursor.execute('''INSERT INTO cubes_table VALUES(?,?,?,?,?,?,?,?,?,?,?)''',
-                       (record.get('EntryID', None),
-                        record.get('Field1', None),
-                        record.get('Field2', None),
-                        record.get('Field104', None),
-                        record.get('Field105', None),
-                        record.get('Field106', None),
-                        record.get('Field107', None),
-                        record.get('Field108', None),
+                       (entry.get('EntryID', None),
+                        entry.get('Field1', None),
+                        entry.get('Field2', None),
+                        entry.get('Field104', None),
+                        entry.get('Field105', None),
+                        entry.get('Field106', None),
+                        entry.get('Field107', None),
+                        entry.get('Field108', None),
                         work_opportunities,
                         time_period,
-                        record.get('Field309', None)))
+                        entry.get('Field309', None)))
 
 
 def database_setup():
@@ -71,3 +73,5 @@ def database_setup():
             print('Database connection closed.')
     return json_response
 
+
+database_setup()
