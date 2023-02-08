@@ -18,13 +18,13 @@ sql_create_cubes_table = """ CREATE TABLE IF NOT EXISTS cubes_table (
                                 ); """
 
 
-def create_table(conn, create_table_sql):
+def create_table(cursor, create_table_sql):
     try:
-        conn.execute(create_table_sql)
+        cursor.execute(create_table_sql)
     except Error as e:
         print(e)
     finally:
-        conn.execute('''DELETE FROM cubes_table''')
+        cursor.execute('''DELETE FROM cubes_table''')
 
 
 def push_to_table(info, cursor):
