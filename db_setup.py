@@ -20,8 +20,7 @@ sql_create_cubes_table = """ CREATE TABLE IF NOT EXISTS cubes_table (
 
 def create_table(conn, create_table_sql):
     try:
-        c = conn.cursor()
-        c.execute(create_table_sql)
+        conn.execute(create_table_sql)
     except Error as e:
         print(e)
 
@@ -50,4 +49,25 @@ def push_to_table(info, cursor):
                         time_period,
                         record.get('Field309', None)))
 
-def db_setup():
+
+def database_setup():
+    json_response = get_json()
+    json_response = json_response['Entries']
+    connection = None
+
+    try:
+        name = 'cubes_database.db'
+        connection = sqlite3.connect(name)
+        cursor = connection.cursor()
+        create_table(cursor, sql_create_cubes_table)
+        push_to_table(json_response, cursor)
+        connection.commit()
+        cursor.close()
+    except Error as e:
+        print(f'A Database Error has occurred: {e}')
+    finally:
+        if connection:
+            connection.close()
+            print('Database connection closed.')
+    return json_response
+
